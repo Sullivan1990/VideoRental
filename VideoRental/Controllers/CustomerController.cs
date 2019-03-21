@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using VideoRental.DAL;
 using VideoRental.Models;
 
 namespace VideoRental.Controllers
@@ -33,20 +34,21 @@ namespace VideoRental.Controllers
         }
         #endregion Demo code only
 
-        public static List<Customer> customerList = new List<Customer>
-        {
-            new Customer{CustomerID = 1, CustomerName = "Alice", CustomerPhone = "1234 567 890"},
-            new Customer{CustomerID = 2, CustomerName = "Bob", CustomerPhone = "2345 678 901"},
-            new Customer{CustomerID = 3, CustomerName = "Paul", CustomerPhone = "3456 789 012"}
-        };
+        //public static List<Customer> customerList = new List<Customer>
+        //{
+        //    new Customer{CustomerID = 1, CustomerName = "Alice", CustomerPhone = "1234 567 890"},
+        //    new Customer{CustomerID = 2, CustomerName = "Bob", CustomerPhone = "2345 678 901"},
+        //    new Customer{CustomerID = 3, CustomerName = "Paul", CustomerPhone = "3456 789 012"}
+        //};
+
+        private VideoContext db = new VideoContext();
 
         public ActionResult Index()
         {
-            var customers = from m in customerList
-                         orderby m.CustomerID
-                         select m;
-
-            return View(customers);
+            //var customers = from m in db.Customers
+            //             orderby m.CustomerID
+            //             select m;
+            return View(db.Customers.ToList());
         }
 
         // Edit Get + Edit Post to display change and save detail
@@ -54,7 +56,7 @@ namespace VideoRental.Controllers
         //this is the edit get to display selected customer
         public ActionResult Edit(int Id)
         {
-            var customer = customerList.Single(m => m.CustomerID == Id);
+            var customer = db.Customers.Single(m => m.CustomerID == Id);
 
             return View(customer);
         }
@@ -81,10 +83,13 @@ namespace VideoRental.Controllers
         {
             try
             {
-                var customer = customerList.Single(m => m.CustomerID == Id);
+                var customer = db.Customers.Single(m => m.CustomerID == Id);
                 if (TryUpdateModel(customer))
+                {
+                    db.SaveChanges();
                     return RedirectToAction("Index");
-
+                }
+                
                 return View(customer);
             }
             catch
@@ -108,12 +113,15 @@ namespace VideoRental.Controllers
                 Customer customer = new Customer();
 
                 //basically, this bit finds the 
-                customer.CustomerID = (customerList.Count == 0) ? 1 :
-                                customerList.Max(m => m.CustomerID) + 1;
+                //customer.CustomerID = (customerList.Count == 0) ? 1 :
+                //                customerList.Max(m => m.CustomerID) + 1;
+
+
 
                 customer.CustomerName = collection["CustomerName"];
                 customer.CustomerPhone = collection["CustomerPhone"];
-                customerList.Add(customer);
+                db.Customers.Add(customer);
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -125,14 +133,14 @@ namespace VideoRental.Controllers
 
         public ActionResult Details(int Id)
         {
-            var customer = customerList.Single(m => m.CustomerID == Id);
+            var customer = db.Customers.Single(m => m.CustomerID == Id);
 
             return View(customer);
         }
 
         public ActionResult Delete(int Id)
         {
-            var customer = customerList.Single(m => m.CustomerID == Id);
+            var customer = db.Customers.Single(m => m.CustomerID == Id);
 
             return View(customer);
         }
@@ -142,8 +150,9 @@ namespace VideoRental.Controllers
         {
             try
             {
-                var customer = customerList.Single(m => m.CustomerID == Id);
-                customerList.Remove(customer);
+                var customer = db.Customers.Single(m => m.CustomerID == Id);
+                db.Customers.Remove(customer);
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }

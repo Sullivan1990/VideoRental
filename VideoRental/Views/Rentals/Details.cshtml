@@ -1,0 +1,51 @@
+﻿@model VideoRental.ViewModels.CustomerRentalDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Rental</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rental.DateRented)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rental.DateRented)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rental.DateReturn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rental.DateReturn)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <h4>Movies Borrowed</h4>
+    <ul>
+        @foreach(var movies in Model.RentedMovies)
+        {
+            <li>@movies.MovieName</li>
+        }
+    </ul>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerName }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

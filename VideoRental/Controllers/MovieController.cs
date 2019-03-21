@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using VideoRental.DAL;
 using VideoRental.Models;
 
 namespace VideoRental.Controllers
@@ -14,6 +15,13 @@ namespace VideoRental.Controllers
         //{
         //    return RedirectToAction("About", "Home");
         //}
+
+        //public static List<Movie> movieList = new List<Movie>
+        //{
+        //    new Movie{MovieID = 1, Name = "The Avengers"},
+        //    new Movie{MovieID = 2, Name = "Star Wars"},
+        //    new Movie{MovieID = 3, Name = "The Matrix"}
+        //};
 
         #region Demo code only
         [Route("{movie}/{index}/{pageIndex}/{sortBy}")]
@@ -33,20 +41,11 @@ namespace VideoRental.Controllers
         }
         #endregion Demo code only
 
-        public static List<Movie> movieList = new List<Movie>
-        {
-            new Movie{MovieID = 1, Name = "The Avengers"},
-            new Movie{MovieID = 2, Name = "Star Wars"},
-            new Movie{MovieID = 3, Name = "The Matrix"}
-        };
+        private VideoContext db = new VideoContext();
 
         public ActionResult Index()
         {
-            var movies = from m in movieList
-                         orderby m.MovieID
-                         select m;
-
-            return View(movies);
+            return View(db.Movies.ToList());
         }
 
         // Edit Get + Edit Post to display change and save detail
@@ -54,7 +53,7 @@ namespace VideoRental.Controllers
         //this is the edit get to display selected movie
         public ActionResult Edit(int Id)
         {
-            var movie = movieList.Single(m => m.MovieID == Id);
+            var movie = db.Movies.Single(m => m.MovieID == Id);
 
             return View(movie);
         }
@@ -81,9 +80,12 @@ namespace VideoRental.Controllers
         {
             try
             {
-                var movie = movieList.Single(m => m.MovieID == Id);
+                var movie = db.Movies.Single(m => m.MovieID == Id);
                 if (TryUpdateModel(movie))
+                {
+                    db.SaveChanges();
                     return RedirectToAction("Index");
+                }
 
                 return View(movie);
             }
@@ -108,11 +110,12 @@ namespace VideoRental.Controllers
                 Movie movie = new Movie();
 
                 //basically, this bit finds the 
-                movie.MovieID = (movieList.Count == 0) ? 1 : 
-                                movieList.Max(m => m.MovieID) + 1;
+                //movie.MovieID = (movieList.Count == 0) ? 1 : 
+                //                movieList.Max(m => m.MovieID) + 1;
 
                 movie.Name = collection["Name"];
-                movieList.Add(movie);
+                db.Movies.Add(movie);
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -124,14 +127,14 @@ namespace VideoRental.Controllers
 
         public ActionResult Details(int Id)
         {
-            var movie = movieList.Single(m => m.MovieID == Id);
+            var movie = db.Movies.Single(m => m.MovieID == Id);
 
             return View(movie);
         }
 
         public ActionResult Delete(int Id)
         {
-            var movie = movieList.Single(m => m.MovieID == Id);
+            var movie = db.Movies.Single(m => m.MovieID == Id);
 
             return View(movie);
         }
@@ -141,8 +144,9 @@ namespace VideoRental.Controllers
         {
             try
             {
-                var movie = movieList.Single(m => m.MovieID == Id);
-                movieList.Remove(movie);
+                var movie = db.Movies.Single(m => m.MovieID == Id);
+                db.Movies.Remove(movie);
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }

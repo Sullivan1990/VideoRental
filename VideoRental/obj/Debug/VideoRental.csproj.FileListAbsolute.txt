@@ -36,7 +36,10 @@ C:\Users\student\source\repos\VideoRental\VideoRental\bin\Microsoft.AI.Dependenc
 C:\Users\student\source\repos\VideoRental\VideoRental\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\student\source\repos\VideoRental\VideoRental\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\student\source\repos\VideoRental\VideoRental\bin\Microsoft.AI.Web.xml
-C:\Users\student\source\repos\VideoRental\VideoRental\obj\Debug\VideoRental.csprojResolveAssemblyReference.cache
 C:\Users\student\source\repos\VideoRental\VideoRental\obj\Debug\VideoRental.csproj.CoreCompileInputs.cache
 C:\Users\student\source\repos\VideoRental\VideoRental\obj\Debug\VideoRental.dll
 C:\Users\student\source\repos\VideoRental\VideoRental\obj\Debug\VideoRental.pdb
+C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.dll
+C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.SqlServer.dll
+C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.xml
+C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.SqlServer.xml
