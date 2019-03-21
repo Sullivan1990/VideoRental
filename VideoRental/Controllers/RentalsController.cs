@@ -33,6 +33,18 @@ namespace VideoRental.Controllers
         {
             var rental = db.Rentals.Single(r => r.RentalId == Id);
             rental.Customers = GetCustomers();
+
+            var rentedMovies = db.RentalItems.Where(r => r.RentalId == Id)
+                                    .Select(m => new CustomerMoviesViewModel
+                                    {
+                                        RentalItemId = m.RentalItemId,
+                                        RentalId = m.RentalId,
+                                        MovieName = db.Movies.Where(c => 
+                                                                    c.MovieID == m.MovieId)
+                                                                    .Select(f => f.Name)
+                                                                    .FirstOrDefault()
+                                    }).ToList();
+            rental.RentedMovies = rentedMovies;
             //var customer = GetCustomers();
             return View(rental);
         }
@@ -66,7 +78,8 @@ namespace VideoRental.Controllers
                                 1 : db.Rentals.Max(r => r.RentalId) + 1;
             rental.DateRented = DateTime.Now;
             rental.Customers = GetCustomers();
-            rental.Customers = GetCustomers();
+            //rental.Customers = GetCustomers();
+            rental.RentedMovies = new List<CustomerMoviesViewModel>();
 
             return View(rental);
         }
@@ -85,7 +98,16 @@ namespace VideoRental.Controllers
                 db.Rentals.Add(rental);
                 db.SaveChanges();
 
-                return RedirectToAction("Index");
+                int count = db.RentalItems.Where(r => r.RentalId == rental.RentalId)
+                                                        .Count<RentalItem>();
+                if(count == 0)
+                {
+                    return RedirectToAction("Edit", new { Id = rental.RentalId });
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
@@ -136,6 +158,74 @@ namespace VideoRental.Controllers
             return View(customerRentalDetails);
         }
 
+        // AddMovies - Get
+        public ActionResult AddMovies(int RentalId)
+        {
+            var rentalItem = new RentalItem();
+            var movies = GetMovies();
+            rentalItem.RentalId = RentalId;
+            rentalItem.Movies = movies;
+
+            return View(rentalItem);
+        }
+
+        // AddMovies - Post
+        [HttpPost]
+        public ActionResult AddMovies(FormCollection collection)
+        {
+            int Id = 0;
+
+            try
+            {
+                RentalItem rentalItem = new RentalItem();
+                rentalItem.MovieId = int.Parse(collection["MovieId"].ToString());
+                rentalItem.RentalId = int.Parse(collection["RentalId"].ToString());
+                Id = rentalItem.RentalId;
+                db.RentalItems.Add(rentalItem);
+                db.SaveChanges();
+
+                return RedirectToAction("Edit", new { Id });
+            }
+            catch(Exception e)
+            {
+                return View("No record associated to rental can be found." +
+                    "\nMake sure to submit the rental details before" +
+                    "adding movies");
+            }
+        }
+
+        // EditRentedMovie - get
+        public ActionResult EditRentedMovie(int Id)
+        {
+            var rentalItem = db.RentalItems.Single(r => r.RentalItemId == Id);
+            rentalItem.Movies = GetMovies();
+
+            return View(rentalItem);
+        }
+
+        // EditRentedMovie - post
+        [HttpPost]
+        public ActionResult EditRentedMovie(int Id, RentalItem rentalItem)
+        {
+            try
+            {
+                var rentalIem = db.RentalItems.Single(r => r.RentalItemId == Id);
+                Id = rentalItem.RentalId;
+                if (TryUpdateModel(rentalItem))
+                {
+                    db.SaveChanges();
+
+                    return RedirectToAction("Edit", new { Id });
+                }
+
+                return View(rentalItem);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         #region Helper methods
 
         public IEnumerable<SelectListItem> GetCustomers()
@@ -149,6 +239,19 @@ namespace VideoRental.Controllers
                                                 }).ToList();
 
             return new SelectList(customers, "Value", "Text");
+        }
+
+        public IEnumerable<SelectListItem> GetMovies()
+        {
+            List<SelectListItem> movies = db.Movies.AsNoTracking()
+                                                .OrderBy(o => o.Name)
+                                                .Select(m => new SelectListItem
+                                                {
+                                                    Value = m.MovieID.ToString(),
+                                                    Text = m.Name
+                                                }).ToList();
+
+            return new SelectList(movies, "Value", "Text");
         }
 
         #endregion Helper methods

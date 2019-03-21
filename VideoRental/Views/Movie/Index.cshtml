@@ -7,7 +7,10 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @*@Html.ActionLink("Create New", "Create")*@
+    <a href="@Url.Action("Create", "Movie")" class="btn btn-default">
+        <i class="fas fa-plus"></i> Create New
+    </a>
 </p>
 <table class="table">
     <tr>
@@ -23,11 +26,33 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MovieID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MovieID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MovieID })
+            @*@Html.ActionLink("Edit", "Edit", new { id = item.MovieID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.MovieID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.MovieID })*@
+            <a href="@Url.Action("Edit", "Movie", new { id = item.MovieID })"
+               class="btn btn-default">
+                <i class="fas fa-pen"></i>
+            </a>
+            <a href="@Url.Action("Details", "Movie", new { id = item.MovieID })"
+               class="btn btn-default">
+                <i class="fas fa-info"></i>
+            </a>
+            <a href="@Url.Action("Delete", "Movie", new { id = item.MovieID })"
+               class="btn btn-default">
+                <i class="fas fa-trash"></i>
+            </a>
         </td>
     </tr>
 }
 
 </table>
+
+@section scripts
+{
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            if (successMessage != '') alertify.success(successMessage);
+        });
+    </script>
+}

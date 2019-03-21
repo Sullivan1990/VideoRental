@@ -43,3 +43,4 @@ C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.dll
 C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.SqlServer.dll
 C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.xml
 C:\Users\student\source\repos\VideoRental\VideoRental\bin\EntityFramework.SqlServer.xml
+C:\Users\student\source\repos\VideoRental\VideoRental\obj\Debug\VideoRental.csprojResolveAssemblyReference.cache

@@ -84,6 +84,7 @@ namespace VideoRental.Controllers
                 if (TryUpdateModel(movie))
                 {
                     db.SaveChanges();
+                    TempData["SuccessMessage"] = "Movie updated successfully.";
                     return RedirectToAction("Index");
                 }
 
@@ -116,6 +117,7 @@ namespace VideoRental.Controllers
                 movie.Name = collection["Name"];
                 db.Movies.Add(movie);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Movie created successfully.";
 
                 return RedirectToAction("Index");
             }
@@ -147,6 +149,7 @@ namespace VideoRental.Controllers
                 var movie = db.Movies.Single(m => m.MovieID == Id);
                 db.Movies.Remove(movie);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Movie deleted successfully.";
 
                 return RedirectToAction("Index");
             }
