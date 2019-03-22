@@ -84,6 +84,9 @@ namespace VideoRental.Controllers
                 if (TryUpdateModel(movie))
                 {
                     db.SaveChanges();
+                    /*  This is a call to the Alertify package, used to display a nice little
+                    *   pop-up window in the corner of the webpage
+                    */
                     TempData["SuccessMessage"] = "Movie updated successfully.";
                     return RedirectToAction("Index");
                 }

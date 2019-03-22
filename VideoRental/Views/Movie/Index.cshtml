@@ -29,6 +29,9 @@
             @*@Html.ActionLink("Edit", "Edit", new { id = item.MovieID }) |
             @Html.ActionLink("Details", "Details", new { id = item.MovieID }) |
             @Html.ActionLink("Delete", "Delete", new { id = item.MovieID })*@
+
+            @* this code below adds an icon to the relative buttons from
+               fontawesome - requires code in the shared -layout View*@
             <a href="@Url.Action("Edit", "Movie", new { id = item.MovieID })"
                class="btn btn-default">
                 <i class="fas fa-pen"></i>
@@ -46,6 +49,8 @@
 }
 
 </table>
+
+@*Magical Javascript to make the magical alertify pop-up do it's thing*@
 
 @section scripts
 {

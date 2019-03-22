@@ -8,6 +8,10 @@ namespace VideoRental.Controllers
 {
     public class HomeController : Controller
     {
+        /*
+         * This controller is responsible for the first page we see when
+         * the website loads
+         */
         public ActionResult Index()
         {
             return View();

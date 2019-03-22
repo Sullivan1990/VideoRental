@@ -9,6 +9,26 @@ namespace VideoRental.DAL
 {
     public class VideoInitializer : DropCreateDatabaseIfModelChanges<VideoContext>
     {
+        /*
+        CreateDatabaseIfNotExists: This is the default initializer.As the name suggests,
+        it will create the database if none exists as per the configuration.
+        However, if you change the model class and then run the application with this initializer,
+        then it will throw an exception.
+
+        DropCreateDatabaseIfModelChanges: This initializer drops an existing database and creates a new database,
+        if your model classes(entity classes) have been changed.
+        So, you don't have to worry about maintaining your database schema, when your model classes change.
+
+        DropCreateDatabaseAlways: As the name suggests, this initializer drops an existing database every time you run the application,
+        irrespective of whether your model classes have changed or not.
+        This will be useful when you want a fresh database every time you run the application, 
+        for example when you are developing the application.
+        */
+
+        //https://www.entityframeworktutorial.net/code-first/database-initialization-strategy-in-code-first.aspx
+
+        // Overrides the Seed method of "DropCreateDatabaseIfModelChanges" that is passed the "VideoContext" Data set
+        // This is the data generation that is used to seed the database
         protected override void Seed(VideoContext context)
         {
             var movies = new List<Movie>
